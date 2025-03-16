@@ -1,0 +1,8 @@
+# Ignorer tout par défaut
+*
+
+# Ne pas ignorer certains fichiers
+!.gitignore
+!API.py
+!"Feature a enrichir.ipynb"
+
