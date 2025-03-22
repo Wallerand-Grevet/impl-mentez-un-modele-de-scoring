@@ -14,3 +14,4 @@
 # Ne pas ignorer le dossier GitHub Actions
 !.github/
 !.github/workflows/
+!.github/workflows/deploy.yml
