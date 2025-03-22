@@ -1,7 +1,7 @@
 # Ignorer tout par défaut
 *
 
-# Ne pas ignorer certains fichiers
+# Ne pas ignorer certains fichiers spécifiques
 !.gitignore
 !API.py
 !app.py
@@ -9,4 +9,8 @@
 !scaler.pkl
 !best_model.pkl
 !best_threshold.pkl
-!"model_ok.ipynb"
+!model_ok.ipynb
+
+# Ne pas ignorer le dossier GitHub Actions
+!.github/
+!.github/workflows/
