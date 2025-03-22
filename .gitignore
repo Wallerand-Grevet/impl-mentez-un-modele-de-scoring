@@ -5,4 +5,5 @@
 !.gitignore
 !API.py
 !app.py
+!scaler.pkl
 !"model_ok.ipynb"
