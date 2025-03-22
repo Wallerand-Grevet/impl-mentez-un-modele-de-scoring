@@ -7,6 +7,7 @@ from flask import Flask, request, jsonify
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.impute import SimpleImputer
 import re
+import os
 
 # -------------------------------------------------
 # Configuration MLflow & Chargement du modèle et du seuil
