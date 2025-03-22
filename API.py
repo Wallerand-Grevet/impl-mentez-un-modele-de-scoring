@@ -11,11 +11,11 @@ import re
 # -------------------------------------------------
 # Configuration MLflow & Chargement du modèle et du seuil
 # -------------------------------------------------
-MLFLOW_TRACKING_URI = "http://127.0.0.1:5001"
+MLFLOW_TRACKING_URI = "https://mlflow-server-hzm1.onrender.com"
 mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 
 MODEL_NAME = "Best Model"
-MODEL_VERSION = 5  # À ajuster selon la version souhaitée
+MODEL_VERSION = 1  # À ajuster selon la version souhaitée
 
 # Chargement du modèle depuis le Model Registry
 model_uri = f"models:/{MODEL_NAME}/{MODEL_VERSION}"
@@ -23,11 +23,19 @@ best_model = mlflow.sklearn.load_model(model_uri)
 print(f"✅ Modèle '{MODEL_NAME}' v{MODEL_VERSION} chargé depuis MLflow.")
 print(f"✅ Type du modèle chargé : {type(best_model)}")
 
-# Chargement du seuil optimal depuis le fichier pickle
-THRESHOLD_PATH = "best_threshold.pkl"
-with open(THRESHOLD_PATH, "rb") as f:
-    best_threshold = pickle.load(f)
-print(f"✅ Seuil optimal chargé : {best_threshold}")
+
+# Chargement du seuil optimal depuis MLflow
+client = MlflowClient()
+
+# Récupère la dernière version validée du modèle (ou la version 1 ici)
+model_version_details = client.get_model_version(name=MODEL_NAME, version=str(MODEL_VERSION))
+run_id = model_version_details.run_id
+
+# Récupère les paramètres du run
+run = client.get_run(run_id)
+best_threshold = float(run.data.params["Best Threshold"])
+
+print(f"✅ Seuil optimal récupéré depuis MLflow : {best_threshold}")
 
 # -------------------------------------------------
 # Liste fixe des 18 colonnes attendues par le modèle
@@ -164,4 +172,4 @@ def predict():
         return jsonify({"error": str(e)})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5002, debug=True)
+    app.run(host="0.0.0.0", port=10000, debug=True)
