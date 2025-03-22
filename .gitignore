@@ -4,4 +4,5 @@
 # Ne pas ignorer certains fichiers
 !.gitignore
 !API.py
+!app.py
 !"model_ok.ipynb"
