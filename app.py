@@ -172,4 +172,5 @@ def predict():
         return jsonify({"error": str(e)})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=10000, debug=True)
+    port = int(os.environ.get("PORT", 5000))  # 5000 en fallback local
+    app.run(host="0.0.0.0", port=port, debug=False)
