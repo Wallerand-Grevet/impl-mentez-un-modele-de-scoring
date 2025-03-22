@@ -7,4 +7,6 @@
 !app.py
 !requirements.txt
 !scaler.pkl
+!best_model.pkl
+!best_threshold.pkl
 !"model_ok.ipynb"
