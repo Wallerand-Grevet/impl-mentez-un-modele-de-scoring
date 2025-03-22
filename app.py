@@ -12,7 +12,7 @@ import os
 # -------------------------------------------------
 # Chargement du modèle, du scaler et du seuil optimal en local
 # -------------------------------------------------
-MODEL_PATH = "model.pkl"
+MODEL_PATH = "best_model.pkl"
 SCALER_PATH = "scaler.pkl"
 THRESHOLD_PATH = "best_threshold.pkl"
 
