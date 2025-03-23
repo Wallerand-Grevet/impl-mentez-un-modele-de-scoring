@@ -10,6 +10,7 @@
 !best_model.pkl
 !best_threshold.pkl
 !model_ok.ipynb
+!test_api.py
 
 # Ne pas ignorer le dossier GitHub Actions
 !.github/
