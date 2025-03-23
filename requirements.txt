@@ -6,4 +6,3 @@ numpy
 gunicorn
 psycopg2-binary
 lightgbm==4.3.0
-re
