@@ -8,6 +8,7 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.impute import SimpleImputer
 import re
 import os
+import shap
 
 # -------------------------------------------------
 # Chargement du modèle, du scaler et du seuil optimal en local
@@ -25,6 +26,9 @@ with open(SCALER_PATH, "rb") as f:
 with open(THRESHOLD_PATH, "rb") as f:
     best_threshold = pickle.load(f)
 
+
+
+
 print("✅ Modèle, scaler et seuil optimal chargés depuis les fichiers locaux.")
 
 # -------------------------------------------------
@@ -37,6 +41,8 @@ selected_features = [
     "INCOME_PER_PERSON", "PAYMENT_RATE", "DAYS_EMPLOYED_RATIO", "AGE_YEARS", 
     "EMPLOYED_YEARS", "YEARS_ID_PUBLISH", "YEARS_REGISTRATION"
 ]
+
+explainer = shap.Explainer(best_model, feature_names=selected_features)
 
 # -------------------------------------------------
 # Fonction pour nettoyer les noms de colonnes
@@ -132,34 +138,34 @@ def predict():
         data = request.get_json()
         if "features" not in data:
             return jsonify({"error": "Le JSON doit contenir une clé 'features'."}), 400
-        
-        # Conversion des données entrantes en DataFrame
-        features = pd.DataFrame(data["features"])
-        
-        # Prétraitement
-        features_processed = preprocess_features(features)
-        
-        # Prédiction de probabilité
-        y_pred_prob = best_model.predict_proba(features_processed)[:, 1]
-        
-        # 🔍 Vérification des probabilités prédites
-        print(f"🔍 Probabilités des prédictions : {y_pred_prob}")
 
-        # Application du seuil optimal
-        print(f"🔍 Seuil utilisé : {best_threshold}")
+        # Conversion en DataFrame
+        features = pd.DataFrame(data["features"])
+        features_processed = preprocess_features(features)
+
+        # Prédiction
+        y_pred_prob = best_model.predict_proba(features_processed)[:, 1]
         y_pred = (y_pred_prob < best_threshold).astype(int)
         decisions = ["Crédit accordé" if pred == 1 else "Crédit refusé" for pred in y_pred]
-        
+
+        # 🔍 SHAP values (on traite un seul client ici)
+        shap_values = explainer(features_processed)
+        shap_dict = dict(zip(selected_features, shap_values[0].values.tolist()))
+
         response = {
             "probability": y_pred_prob.tolist(),
             "prediction": y_pred.tolist(),
-            "decision": decisions
+            "decision": decisions,
+            "threshold": float(best_threshold),
+            "shap_values": [shap_dict]
         }
+
         return jsonify(response)
-    
+
     except Exception as e:
         print(f"❌ Erreur : {e}")
         return jsonify({"error": str(e)})
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))  # 5000 en fallback local
