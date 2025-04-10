@@ -42,7 +42,6 @@ selected_features = [
     "EMPLOYED_YEARS", "YEARS_ID_PUBLISH", "YEARS_REGISTRATION"
 ]
 
-explainer = shap.Explainer(best_model, feature_names=selected_features)
 
 # -------------------------------------------------
 # Fonction pour nettoyer les noms de colonnes
@@ -156,8 +155,6 @@ def predict():
             "probability": y_pred_prob.tolist(),
             "prediction": y_pred.tolist(),
             "decision": decisions,
-            "threshold": float(best_threshold),
-            "shap_values": [shap_dict]
         }
 
         return jsonify(response)
