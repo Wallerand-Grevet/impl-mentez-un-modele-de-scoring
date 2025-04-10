@@ -8,7 +8,6 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.impute import SimpleImputer
 import re
 import os
-import shap
 
 # -------------------------------------------------
 # Chargement du modèle, du scaler et du seuil optimal en local
