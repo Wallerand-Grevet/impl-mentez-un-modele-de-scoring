@@ -146,14 +146,10 @@ def predict():
         y_pred = (y_pred_prob < best_threshold).astype(int)
         decisions = ["Crédit accordé" if pred == 1 else "Crédit refusé" for pred in y_pred]
 
-        # 🔍 SHAP values (on traite un seul client ici)
-        shap_values = explainer(features_processed)
-        shap_dict = dict(zip(selected_features, shap_values[0].values.tolist()))
-
         response = {
             "probability": y_pred_prob.tolist(),
             "prediction": y_pred.tolist(),
-            "decision": decisions,
+            "decision": decisions
         }
 
         return jsonify(response)
